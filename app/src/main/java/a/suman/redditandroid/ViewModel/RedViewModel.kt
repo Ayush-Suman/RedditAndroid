@@ -8,9 +8,10 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
 
-class RedViewModel(application: Application) : AndroidViewModel(application) {
+class RedViewModel @Inject constructor(application: Application) : AndroidViewModel(application) {
     private var redTable = MutableLiveData<List<RedTable>>()
     private val repository = Repository(application)
     private var disposable:Disposable?=null

@@ -5,19 +5,23 @@ import a.suman.redditandroid.Adapter.onClickRed
 import a.suman.redditandroid.R
 import a.suman.redditandroid.ViewModel.RedViewModel
 import a.suman.redditandroid.ViewModel.networkFail
+import a.suman.redditandroid.di.AppModule
+import a.suman.redditandroid.di.DaggerAppComponent
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+//import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), onClickRed, networkFail {
 
+    @Inject lateinit var viewModel: RedViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +29,10 @@ class MainActivity : AppCompatActivity(), onClickRed, networkFail {
 
         val adapter=RecyclerViewAdapter(this)
         recyclerview.layoutManager=LinearLayoutManager(this)
-        val viewModel =ViewModelProviders.of(this).get(RedViewModel::class.java)
+        //val viewModel =ViewModelProviders.of(this).get(RedViewModel::class.java)
+
+        DaggerAppComponent.builder().appModule(AppModule(application)).build().inject(this)
+
 
         viewModel.refresh(this)
         viewModel.redData.observe(this, Observer { adapter.setData(it) })
